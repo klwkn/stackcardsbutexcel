@@ -40,14 +40,14 @@ namespace StackCaravan
                 Console.WriteLine("Excel is not installed!");
                 return;
             }
-            Workbook excelBook = excelApp.Workbooks.Open(@"C:\Users\22-0202c\Downloads\deckofcards.xlsx");
+            Workbook excelBook = excelApp.Workbooks.Open(@"C:\Users\22-0202c\Downloads\deckofcards (1).xlsx");
             _Worksheet excelSheet = excelBook.Sheets[1];
             Range excelRange = excelSheet.UsedRange;
             int rows = excelRange.Rows.Count;
             int cols = excelRange.Columns.Count;
-            for(int i = 0; i < rows; i++)
+            for(int i = 1; i <= rows; i++)
             {
-                for(int j = 0; j <= cols; j++)
+                for(int j = 1; j <= cols; j++)
                 {
                     if (excelRange.Cells[i, j] != null && excelRange.Cells[i, j].Value2 != null)
                         list.Add(excelRange.Cells[i, j].Value2.ToString());
