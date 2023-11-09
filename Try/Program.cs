@@ -28,8 +28,20 @@ namespace StackCaravan
         }
         public static void TimerCallBack(Object o)
         {
+            void HandleTimer()
+            {
+                Console.WriteLine("Interval Called");
+            }
+            System.Timers.Timer timer = new(interval: 1000);
+            timer.Elapsed += (sender, e) => HandleTimer();
+            timer.Start();
 
+            Console.ReadLine(); // To make sure the console app keeps running.
+            System.Threading.Thread.Sleep(10000);
+
+            timer.Dispose();
         }
+    }
         static void Main(string[] args)
         {
             List<string> list = new List<string>();
