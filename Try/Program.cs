@@ -58,8 +58,28 @@ namespace StackCaravan
             shuffleList(list);
             Stack<string> deckofCards = new Stack<string>(list);
             deckOfCards(deckofCards);
-            Console.WriteLine("haha");
-            Console.ReadLine();
+            Console.Write("\nGenerate User Cards? [y/n]: ");
+            string ans = Console.ReadLine().ToLower();
+            if (ans == "y")
+            {
+                Console.WriteLine("Generating user cards in ");
+                //setTimer()
+                GetuserCards(usercards, deckofCards);
+                deckOfCards(deckofCards);
+            }
+            Console.Write("Draw First Card? [y/n]: ");
+            string ans2 = Console.ReadLine().ToLower();
+            if (ans2 == "y")
+            {
+                usercards.RemoveAt(0);
+                displayUserCards(usercards);
+                usercards.Add(deckofCards.Pop());
+                displayUserCards(usercards);
+                deckOfCards(deckofCards);
+            }
+            excelApp.Quit();
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
+            Console.ReadKey();
         }
     }
 }
