@@ -4,6 +4,7 @@ using System.Timers;
 using System;
 using System.Threading;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace StackCaravan
 {
@@ -32,6 +33,7 @@ namespace StackCaravan
             foreach (var player in players)
             {
                 List<string> cards = new List<string>();
+
                 for (int i = 0; i < 13; i++) // Assuming you want to get 13 user cards
                 {
                     cards.Add(deck.Pop());
@@ -65,9 +67,9 @@ namespace StackCaravan
         public static void TimerCallBack(Object o)
         {
             Console.Write(time + "      ");
-            time--;
+            time++;
 
-            if (time == 0)
+            if (time == 6)
             {
                 Console.WriteLine("\n");
                 timer.Enabled = false;
@@ -76,12 +78,12 @@ namespace StackCaravan
 
         public static void setTimer()
         {
-            time = 5;
+            time = 1;
             timer = new System.Timers.Timer(1000);
             timer.Elapsed += (sender, e) => TimerCallBack(e);
             timer.AutoReset = true;
             timer.Enabled = true;
-            while (time > 0)
+            while (time < 6)
             {
                 
             }
@@ -135,7 +137,6 @@ namespace StackCaravan
             players.Enqueue("Player 1");
             players.Enqueue("Player 2");
             players.Enqueue("Player 3");
-            players.Enqueue("Player 4");
             Console.WriteLine("\nPlayers who are playing the game: ");
             foreach (var player in players)
             {
@@ -147,12 +148,12 @@ namespace StackCaravan
             string ans = Console.ReadLine().ToLower();
             if (ans == "y")
             {
-                Console.WriteLine("Generating user cards in ");
-                setTimer();
                 GetuserCards(playerCards, players, deckofCards);
-                foreach (var player in playerCards)
+                foreach (var player in playerCards.Reverse())
                 {
-                    Console.WriteLine($"\n{player.Key}'s Cards: ");
+                    Console.WriteLine($"\nGenerating {player.Key}'s cards in ");
+                    setTimer();
+                    //Console.WriteLine($"\n{player.Key}'s Cards: ");
                     int ucardsPerRow = 5;
                     int ucount = 0;
                     foreach (var card in player.Value)
@@ -166,6 +167,7 @@ namespace StackCaravan
                         }
                     }
                 }
+                deckOfCards(deckofCards);
                 /*Console.WriteLine("\nShuffled Cards:");
                 int ucardsPerRow = 5;
                 int ucount = 0;
@@ -186,15 +188,30 @@ namespace StackCaravan
             {
                 return;
             }
-            /*Console.Write("Draw First Card? [y/n]: ");
+            Console.Write("Draw First Card? [y/n]: ");
             string ans2 = Console.ReadLine().ToLower();
             if (ans2 == "y")
             {
-                usercards.RemoveAt(0);
-                displayUserCards(usercards);
-                usercards.Add(deckofCards.Pop());
-                Console.WriteLine("Shuffled Cards:");
-                int mcardsPerRow = 5;
+                foreach (var player in playerCards)
+                {
+                    Console.WriteLine($"\nDrawing and getting card for {player.Key}: ");
+                    setTimer();
+                    player.Value.RemoveAt(0);
+                    int mcardsPerRow = 5;
+                    int mcount = 0;
+                    foreach (var card in deckofCards)
+                    {
+                        Console.Write($"{card,-5}");
+                        mcount++;
+                        if (mcount == mcardsPerRow)
+                        {
+                            Console.WriteLine();
+                            mcount = 0;
+                        }
+                    }
+                }
+                deckOfCards(deckofCards);
+                /*int mcardsPerRow = 5;
                 int mcount = 0;
                 foreach (var card in deckofCards)
                 {
@@ -205,14 +222,31 @@ namespace StackCaravan
                         Console.WriteLine();
                         mcount = 0;
                     }
+                }*/
+                
+                /*playerCards.RemoveAt(0);
+                displayUserCards(usercards);
+                usercards.Add(deckofCards.Pop());
+                Console.WriteLine("Shuffled Cards:");
+                int mcardsPerRow = 5;
+                int mcount = 0;
+                foreach (var card in deckofCards)
+                {
+                    Console.Write($"{card,-5}");
+                    mcount++;
+                    if (mcount == mcardsPerRow)
+                    {
+                        Console.WriteLine();
+                        mcount = 0;
+                    }
                 }
                 displayUserCards(usercards);
-                deckOfCards(deckofCards);
+                deckOfCards(deckofCards);*/
             }
             else
             {
                 return;
-            }*/
+            }
             excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
             Console.ReadKey();
