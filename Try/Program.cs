@@ -41,12 +41,30 @@ namespace StackCaravan
                 playerCards.Add(player, cards);
             }
         }
-        public static void displayUserCards(List<string> ucards)
+        public static void displayUserCards(List<string> ucards) // due to current updates to the code, I have not used this method.
         {
             Console.WriteLine("\nUser Cards:");
             int cardsPerRow = 5;
             int count = 0;
             foreach (string card in ucards)
+            {
+                Console.Write($"{card,-5}");
+                count++;
+                if (count == cardsPerRow)
+                {
+                    Console.WriteLine();
+                    count = 0;
+                }
+            }
+            Console.WriteLine();
+        }
+        public static void DisplayRemainingDeck(Stack<string> deck)
+        {
+            Console.WriteLine("\nRemaining Cards in the Deck:");
+
+            int cardsPerRow = 5;
+            int count = 0;
+            foreach (var card in deck)
             {
                 Console.Write($"{card,-5}");
                 count++;
@@ -100,7 +118,7 @@ namespace StackCaravan
                 Console.WriteLine("Excel is not installed!");
                 return;
             }
-            Workbook excelBook = excelApp.Workbooks.Open(@"C:\Users\22-0202c\Downloads\deckofcards.xlsx"); //make sure this directory is correct
+            Workbook excelBook = excelApp.Workbooks.Open(@"C:\Users\rbuen\Downloads\deckofcards.xlsx"); //make sure this directory is correct
             _Worksheet excelSheet = excelBook.Sheets[1];
             Range excelRange = excelSheet.UsedRange;
             int rows = excelRange.Rows.Count;
@@ -131,7 +149,7 @@ namespace StackCaravan
                     count =0;
                 }
             }
-            Stack<string> deckofCards = new Stack<string>(list);
+            Stack<string> deckofCards = new Stack<string>(list.Reverse<string>());
             Queue<string> players = new Queue<string>();
             Thread.Sleep(2000);
             players.Enqueue("Player 1");
@@ -149,11 +167,10 @@ namespace StackCaravan
             if (ans == "y")
             {
                 GetuserCards(playerCards, players, deckofCards);
-                foreach (var player in playerCards.Reverse())
+                foreach (var player in playerCards)
                 {
                     Console.WriteLine($"\nGenerating {player.Key}'s cards in ");
                     setTimer();
-                    //Console.WriteLine($"\n{player.Key}'s Cards: ");
                     int ucardsPerRow = 5;
                     int ucount = 0;
                     foreach (var card in player.Value)
@@ -168,6 +185,7 @@ namespace StackCaravan
                     }
                 }
                 deckOfCards(deckofCards);
+                DisplayRemainingDeck(deckofCards);
                 /*Console.WriteLine("\nShuffled Cards:");
                 int ucardsPerRow = 5;
                 int ucount = 0;
@@ -196,10 +214,11 @@ namespace StackCaravan
                 {
                     Console.WriteLine($"\nDrawing and getting card for {player.Key}: ");
                     setTimer();
-                    player.Value.RemoveAt(0);
+                    string drawnCard = deckofCards.Pop();
+                    player.Value.Add(drawnCard);
                     int mcardsPerRow = 5;
                     int mcount = 0;
-                    foreach (var card in deckofCards)
+                    foreach (var card in player.Value)
                     {
                         Console.Write($"{card,-5}");
                         mcount++;
@@ -223,7 +242,7 @@ namespace StackCaravan
                         mcount = 0;
                     }
                 }*/
-                
+
                 /*playerCards.RemoveAt(0);
                 displayUserCards(usercards);
                 usercards.Add(deckofCards.Pop());
